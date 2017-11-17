@@ -35,19 +35,6 @@
 		AND "USER_PASSWORD" = #{userPassword}
 	</select>
 	
-		
-	<select id="selectUserByLogin" parameterType="hashmap"   resultType="hashmap">
-		SELECT "USER_ID"
-				, "USER_PASSWORD"
-				, "USER_NAME"
-				, "USER_AGE"
-		FROM public."USER_INFO"
-		WHERE "USER_ID" =#{userId}
-		AND "USER_PASSWORD" = #{userPassword}
-	</select>
-	
-	
-	
 	
 	
 </mapper>
