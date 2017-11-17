@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.HeroMapper">
+	
+	<insert id="insertHero" parameterType="Map" >
+		INSERT INTO public.hero(
+				id
+			, name
+		)VALUES (
+			 #{id}
+			,#{name}
+		);
+	</insert>
+	<select id="selectHeros" parameterType="hashmap"   resultType="com.example.demo.vo.Hero">
+		SELECT id, name
+		FROM public.hero;
+	</select>
+</mapper>
