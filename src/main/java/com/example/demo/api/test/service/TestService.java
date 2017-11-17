@@ -41,6 +41,36 @@ public class TestService {
 		return	rtnMap;
 	}
 	
+	public  Map<String, Object> loginUser(Map<String, Object> map) {
+		
+		Map<String, Object> rtnMap = new HashMap<String, Object>();
+		List<Map<String, Object>> rtnList = null;
+		rtnMap.put("succuess", "true");
+		
+		try {
+			rtnList = testMapper.selectUserByLogin(map);	
+			
+			if(rtnList.size()==0) {
+				rtnMap.put("succuess", "false");
+			}else {
+				rtnMap.put("USER_ID", rtnList.get(0).get("USER_ID"));
+				rtnMap.put("USER_PASSWORD", rtnList.get(0).get("USER_PASSWORD"));
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			rtnMap.put("succuess", "false");
+		}
+		
+		//return map;
+		
+		return	rtnMap;
+	}
+	
+	
+	
+	
+	
 	public  Map<String, Object> getUserList(Map<String, Object> map) {
 		
 		Map<String, Object> rtnMap = new HashMap<String, Object>();

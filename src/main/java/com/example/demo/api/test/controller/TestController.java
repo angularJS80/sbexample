@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,6 +46,42 @@ public class TestController {
     	logger.debug(parameterMap.toString());
     	return gson.toJson(testService.regUser(parameterMap));
 	}
+    
+	 /*안드로이드 테스트 회원가입*/
+    @RequestMapping(value="/regUserJson", method=RequestMethod.POST)
+    public  String regUserJson(@RequestBody Map<String, Object> paramMap, HttpServletRequest request) {    	
+    	return gson.toJson(testService.regUser(paramMap));
+	}
+    
+    /*안드로이드 테스트 회원가입*/
+    @RequestMapping(value="/loginUser", method=RequestMethod.POST)
+    public  String loginUser( HttpServletRequest request) {    	
+    	Map parameterMap = new HashMap();
+    	Enumeration enums = request.getParameterNames();
+    	while(enums.hasMoreElements()){
+	    	String paramName = (String)enums.nextElement();
+	    	String[] parameters = request.getParameterValues(paramName);
+	
+	    	// Parameter가 배열일 경우
+	    	if(parameters.length > 1){
+	    		parameterMap.put(paramName, parameters);
+	    	// Parameter가 배열이 아닌 경우
+	    	}else{
+	    		parameterMap.put(paramName, parameters[0]);
+	    	}
+    	}
+    	logger.debug(parameterMap.toString());
+    	return gson.toJson(testService.loginUser(parameterMap));
+	}
+    
+    /*안드로이드 테스트 회원가입*/
+    @RequestMapping(value="/delUser", method=RequestMethod.POST)
+    public  String delUser( HttpServletRequest request) {    	
+    	Map rtnMap = new HashMap();
+    	rtnMap.put("succuess", "true");
+    	return gson.toJson(rtnMap);
+	}
+    
     
     /*안드로이드 테스트 회원가입*/
     @RequestMapping(value="/getUserList", method=RequestMethod.GET)
