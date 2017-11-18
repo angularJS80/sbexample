@@ -1,4 +1,4 @@
-
+/*
  
 package com.example.demo.config;
 
@@ -41,4 +41,4 @@ public class CORSFilter implements Filter {
 	public void destroy() {
 	}
 
-}
+}*/

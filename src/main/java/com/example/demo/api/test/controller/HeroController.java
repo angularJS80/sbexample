@@ -1,4 +1,5 @@
 package com.example.demo.api.test.controller;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,5 +38,14 @@ public class HeroController {
     	logger.debug(paramMap.toString());
     	return gson.toJson(heroService.getHeroList(paramMap));
 	}
+    
+    /*안드로이드 테스트 회원가입*/
+    @RequestMapping(value="/getList", method=RequestMethod.GET)
+    public  String getUserList( HttpServletRequest request) {    
+    	Map paramMap = new HashMap();
+    	logger.debug(paramMap.toString());
+    	return gson.toJson(heroService.getHeroList(paramMap));
+	}
+    
     
 }

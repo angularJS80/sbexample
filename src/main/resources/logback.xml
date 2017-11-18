@@ -14,5 +14,19 @@
 	<logger name="jdbc.resultset" level="ERROR"/> <!-- ResultSet을 포함한 모든 JDBC 호출 정보를 로그로 남기므로 매우 방대한 양의 로그가 생성된다. -->
     
     
+    
+    <logger name="ch.qos.logback" level="WARN"/>
+    <logger name="io.undertow" level="WARN"/>
+    <logger name="io.undertow.websockets.jsr" level="ERROR"/>
+    <logger name="org.ehcache" level="WARN"/>
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.springframework.security" level="WARN"/>
+    <logger name="org.springframework.cache" level="WARN"/>
+    <logger name="org.xnio" level="WARN"/>
+    <logger name="springfox" level="WARN"/>
+    <logger name="sun.rmi" level="WARN"/>
+    
+    
+    
 </configuration>
 

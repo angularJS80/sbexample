@@ -7,7 +7,7 @@
 				id
 			, name
 		)VALUES (
-			 #{id}
+		 	CAST(#{id} AS integer)			 
 			,#{name}
 		);
 	</insert>

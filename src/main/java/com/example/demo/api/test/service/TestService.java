@@ -92,7 +92,7 @@ public class TestService {
 	
 	
 
-	@Scheduled(fixedRateString = "10000")
+	//@Scheduled(fixedRateString = "10000")
 	public void scjTest()  {
 		System.out.println("Test");
 	}
