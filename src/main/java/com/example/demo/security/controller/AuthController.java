@@ -53,7 +53,7 @@ public class AuthController {
             response.addHeader(AUTHORIZATION_HEADER, jwt);
             return ResponseEntity.ok(new JwtAuthResponse(jwt));
         } catch (AuthenticationException ae) {
-            logger.trace("Authentication exception trace: {}", ae);
+            logger.debug("Authentication exception trace: {}", ae);
             return new ResponseEntity<>(Collections.singletonMap("AuthenticationException",
                     ae.getLocalizedMessage()), HttpStatus.UNAUTHORIZED);
         }
