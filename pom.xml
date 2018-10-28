@@ -4,11 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.demo.example</groupId>
-    <artifactId>spring-angular-app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
-    <name>spring-angular-app</name>
+    <name>sbexample</name>
     <description>project for Spring-angular</description>
 
     <parent>
@@ -286,4 +285,5 @@
     </profiles>
 
 
+    <artifactId>sbexample</artifactId>
 </project>
