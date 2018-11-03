@@ -76,14 +76,14 @@ public class UserController {
     	    try {
 	    	    	while (true) {
 		        if (futureUserReg.isDone()) {
-		        	userRepository.save(futureUserReg.get());
+		        		 //userRepository.save(futureUserReg.get());
 		        	     return new ResponseEntity<>(HttpStatus.CREATED);
 		        }
 		        //Thread.sleep(5);
 	    		}
            
         } catch (Exception ae) {
-        		ae.printStackTrace();
+        		ae.printStackTrace(); 
             logger.debug("Authentication exception trace: {}", ae);
             return new ResponseEntity<>(Collections.singletonMap("RegistException",
                     ae.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
