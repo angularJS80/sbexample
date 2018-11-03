@@ -6,6 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 /**
@@ -61,6 +67,12 @@ public class UserService {
         return newUser;
     }
 
+    @Async
+   	public Future<User> registerAccountAsync(UserDto.Create userDto) {
+    		User user = registerAccount(userDto);
+		return new AsyncResult<User>(user);
+    }
+    
     public User registerAccount(UserDto.Create userDto) {
         userRepository.findOneByLoginOrEmail(userDto.getLogin(), userDto.getEmail())
                 .ifPresent(user -> {

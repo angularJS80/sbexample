@@ -11,16 +11,25 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.security.comn.PaginationUtil;
+import com.example.demo.security.jwt.JwtAuthRequest;
+import com.example.demo.security.jwt.JwtAuthResponse;
 import com.example.demo.security.model.User;
 import com.example.demo.security.model.UserDto;
 import com.example.demo.security.repository.UserRepository;
 import com.example.demo.security.service.UserService;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
+import static com.example.demo.security.jwt.JwtFilter.AUTHORIZATION_HEADER;
+
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * @modify Yongbeom Cho
@@ -55,6 +64,36 @@ public class UserController {
         userService.registerAccount(userDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+    
+
+    @PostMapping(path = "/registerAsync",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    public ResponseEntity registerAccountAsync(@Valid @RequestBody UserDto.Create userDto) {
+        HttpHeaders textPlainHeaders = new HttpHeaders();
+        textPlainHeaders.setContentType(MediaType.TEXT_PLAIN);
+        if (!!StringUtils.isEmpty(userDto.getPassword()) &&
+                userDto.getPassword().length() >= 4 && userDto.getPassword().length() <= 100) {
+            return new ResponseEntity<>(CHECK_ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
+        }
+      
+    		Future<User> futureUserReg =  userService.registerAccountAsync(userDto);
+    		
+    	    try {
+	    	    	while (true) {
+		        if (futureUserReg.isDone()) {
+		        	     return new ResponseEntity<>(HttpStatus.CREATED);
+		        }
+		        Thread.sleep(5);
+	    		}
+           
+        } catch (Exception ae) {
+        		ae.printStackTrace();
+            logger.debug("Authentication exception trace: {}", ae);
+            return new ResponseEntity<>(Collections.singletonMap("RegistException",
+                    ae.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }    
+    
 
     @GetMapping("/users/{login}")
     public ResponseEntity<UserDto.Response> getUser(@PathVariable String login) {
