@@ -80,7 +80,7 @@ public class AuthController {
 		                 return ResponseEntity.ok(new JwtAuthResponse(jwtToken));
 		        }
 		        
-		        //Thread.sleep(5);
+		        Thread.sleep(700);// 쓰레드를쉬게하여 와일문의 카운트를 줄인다.
 	    		}
            
         } catch (Exception ae) {

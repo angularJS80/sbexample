@@ -16,9 +16,13 @@ import org.springframework.web.client.RestTemplate;
 
 public class LoadTest2 {
 	static AtomicInteger counter = new AtomicInteger(0);
-	static String postUserRegUrl = "http://52.193.154.247:28080/sbexample/api/registerAsync";
-	static String postloginUrl = "http://52.193.154.247:28080/sbexample/api/authenticateAsync";
-	static int loadCnt = 500;
+	//String postUserRegUrl = "http://52.193.154.247:28080/sbexample/api/registerAsync";
+	static String postUserRegUrl = "http://localhost:38080/sbexample2/api/registerAsync";
+	
+	//static String postloginUrl = "http://52.193.154.247:28080/sbexample/api/authenticateAsync";
+	static String postloginUrl = "http://localhost:38080/sbexample2/api/authenticateAsync";
+	
+	static int loadCnt = 1000;
 	static RestTemplate restTemplate = new RestTemplate();
 
 	
@@ -45,21 +49,17 @@ public class LoadTest2 {
 
 	StopWatch sw = new StopWatch();
 	sw.start();
-	
+	/*
 	String regRequestJson = createRegUserJson(idx);
 	HttpEntity<String> regEntity = new HttpEntity<String>(regRequestJson,headers);
 	ResponseEntity<String> reganswer = restTemplate.postForEntity(postUserRegUrl, regEntity, String.class);
 	System.out.println("reganswer: "+reganswer);
-	
-	/*
-	
-	
+	*/
 	String logRequestJson = createLoginUserJson(idx);
 	HttpEntity<String> logEntity = new HttpEntity<String>(logRequestJson,headers);
 	ResponseEntity<String> loganswer = restTemplate.postForEntity(postloginUrl, logEntity, String.class);
 	System.out.println(loganswer);
-	*/	
-
+	
 	sw.stop();
 	
 

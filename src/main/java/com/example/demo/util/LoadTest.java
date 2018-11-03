@@ -17,9 +17,9 @@ public class LoadTest {
 	public static void main(String[] args){
 		ExecutorService es = Executors.newFixedThreadPool(101);
 		RestTemplate rt = new RestTemplate();
-		String getUrl = "http://52.193.154.247:28080/sbexample/api/authenticateAsyncGet?username=testuser&password=testuser&rememberMe=false";
 		String postUserRegUrl = "http://52.193.154.247:28080/sbexample/api/register";
-		String postloginUrl = "http://52.193.154.247:28080/sbexample/api/authenticateAsync";
+		//String postloginUrl = "http://52.193.154.247:28080/sbexample/api/authenticateAsync";
+		String postloginUrl = "http://localhost:38080/sbexample2/api/authenticateAsync";
 		
 		
 		RestTemplate restTemplate = new RestTemplate();
@@ -34,7 +34,7 @@ public class LoadTest {
 		
 		
 		
-		int loadCnt = 2000;
+		int loadCnt = 1000;
 		CyclicBarrier barrier = new CyclicBarrier(loadCnt);
 		
 		for(int i=0;i<loadCnt;i++) {
@@ -44,13 +44,12 @@ public class LoadTest {
 			HttpEntity<String> regEntity = new HttpEntity<String>(regRequestJson,headers);
 			ResponseEntity<String> reganswer = restTemplate.postForEntity(postUserRegUrl, regEntity, String.class);
 			System.out.println("reganswer: "+reganswer);
-			
 			/*
 			String logRequestJson = createLoginUserJson(i);
 			HttpEntity<String> logEntity = new HttpEntity<String>(logRequestJson,headers);
 			ResponseEntity<String> loganswer = restTemplate.postForEntity(postloginUrl, logEntity, String.class);
 			System.out.println(loganswer);
-			*/
+			*/	
 				
 				
 		}

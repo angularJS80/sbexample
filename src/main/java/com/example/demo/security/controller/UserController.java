@@ -76,10 +76,10 @@ public class UserController {
     	    try {
 	    	    	while (true) {
 		        if (futureUserReg.isDone()) {
-		        		 //userRepository.save(futureUserReg.get());
+		        		 userRepository.save(futureUserReg.get());
 		        	     return new ResponseEntity<>(HttpStatus.CREATED);
 		        }
-		        //Thread.sleep(5);
+		        Thread.sleep(700); // 쓰레드를 슬립을 주어 와일문을 쉬게 한다. 
 	    		}
            
         } catch (Exception ae) {
