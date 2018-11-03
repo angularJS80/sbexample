@@ -9,7 +9,7 @@ spring:
         livereload:
             enabled: true
     datasource:
-        jndi-name: java:comp/env/jdbc/postgres
+        jndi-name: java:comp/env/jdbc/mysql
 #        type: com.zaxxer.hikari.HikariDataSource
 #        url: jdbc:postgresql://211.249.60.229:5432/demo
 #        username: sa
@@ -18,19 +18,20 @@ spring:
         initialize: true
 
     jpa:
-        database-platform: org.hibernate.dialect.PostgreSQL94Dialect
-        database: POSTGRESQL
+#       database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+#        database-platform: = org.hibernate.dialect.MySQL5Dialect
+#        database: POSTGRESQL
         show-sql: true
         format_sql: true
-        properties:
-            hibernate.id.new_generator_mappings: true
-            hibernate.cache.use_second_level_cache: true
-            hibernate.cache.use_query_cache: false
-            hibernate.generate_statistics: true
-            hibernate.session.events.log: false
-            hibernate.temp.use_jdbc_metadata_defaults: false            
-        #hibernate:
-          #ddl-auto: create
+#        properties:
+#            hibernate.id.new_generator_mappings: true
+#            hibernate.cache.use_second_level_cache: true
+#            hibernate.cache.use_query_cache: false
+#            hibernate.generate_statistics: true
+#            hibernate.session.events.log: false
+#            hibernate.temp.use_jdbc_metadata_defaults: false            
+        hibernate:
+          ddl-auto: create
 
         
 server:

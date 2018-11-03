@@ -60,7 +60,7 @@ class DefaultDatabaseConfig{
     		// 로칼톰캣에서 정상 작동.. 와스마다 사용해야 되는 구현채가 다른가 보다. 
     		
 		    JndiObjectFactoryBean bean = new JndiObjectFactoryBean();
-	        bean.setJndiName("java:comp/env/jdbc/postgres");
+	        bean.setJndiName("java:comp/env/jdbc/mysql");
 	        bean.setProxyInterface(DataSource.class);
 	        
 	        bean.setLookupOnStartup(false);
