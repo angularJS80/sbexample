@@ -18,7 +18,7 @@ public class LoadTest {
 		ExecutorService es = Executors.newFixedThreadPool(101);
 		RestTemplate rt = new RestTemplate();
 		String getUrl = "http://52.193.154.247:28080/sbexample/api/authenticateAsyncGet?username=testuser&password=testuser&rememberMe=false";
-		String postUserRegUrl = "http://52.193.154.247:28080/sbexample/api/registerAsync";
+		String postUserRegUrl = "http://52.193.154.247:28080/sbexample/api/register";
 		String postloginUrl = "http://52.193.154.247:28080/sbexample/api/authenticateAsync";
 		
 		
@@ -34,7 +34,7 @@ public class LoadTest {
 		
 		
 		
-		int loadCnt = 101;
+		int loadCnt = 2000;
 		CyclicBarrier barrier = new CyclicBarrier(loadCnt);
 		
 		for(int i=0;i<loadCnt;i++) {

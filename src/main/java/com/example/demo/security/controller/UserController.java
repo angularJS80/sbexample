@@ -65,7 +65,6 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
     
-
     @PostMapping(path = "/registerAsync",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity registerAccountAsync(@Valid @RequestBody UserDto.Create userDto) {
@@ -77,9 +76,10 @@ public class UserController {
     	    try {
 	    	    	while (true) {
 		        if (futureUserReg.isDone()) {
+		        	userRepository.save(futureUserReg.get());
 		        	     return new ResponseEntity<>(HttpStatus.CREATED);
 		        }
-		        Thread.sleep(5);
+		        //Thread.sleep(5);
 	    		}
            
         } catch (Exception ae) {
