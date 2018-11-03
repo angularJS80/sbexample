@@ -34,7 +34,7 @@ public class LoadTest {
 		
 		
 		
-		int loadCnt = 2000;
+		int loadCnt = 101;
 		CyclicBarrier barrier = new CyclicBarrier(loadCnt);
 		
 		for(int i=0;i<loadCnt;i++) {
@@ -43,7 +43,7 @@ public class LoadTest {
 			String regRequestJson = createRegUserJson(i);
 			HttpEntity<String> regEntity = new HttpEntity<String>(regRequestJson,headers);
 			ResponseEntity<String> reganswer = restTemplate.postForEntity(postUserRegUrl, regEntity, String.class);
-			System.out.println(reganswer);
+			System.out.println("reganswer: "+reganswer);
 			
 			/*
 			String logRequestJson = createLoginUserJson(i);
