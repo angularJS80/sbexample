@@ -74,6 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/authenticate").permitAll()
                 .antMatchers("/api/authenticateAsync").permitAll()
                 .antMatchers("/api/register").permitAll()
+                .antMatchers("/api/registerAsync").permitAll()
                 .antMatchers("/hero/**").authenticated()
                 .antMatchers("/api/**").authenticated();
         		
