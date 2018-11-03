@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.security.jwt.JwtAuthRequest;
 import com.example.demo.security.jwt.JwtAuthResponse;
-import com.example.demo.security.jwt.JwtFilter;
 import com.example.demo.security.jwt.JwtUtil;
 import com.example.demo.security.service.AuthService;
 
