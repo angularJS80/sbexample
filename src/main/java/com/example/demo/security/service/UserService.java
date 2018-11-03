@@ -69,8 +69,28 @@ public class UserService {
 
     @Async("threadPoolTaskExecutor")
    	public Future<User> registerAccountAsync(UserDto.Create userDto) {
-    		User user = registerAccount(userDto);
-		return new AsyncResult<User>(user);
+    		userRepository.findOneByLoginOrEmail(userDto.getLogin(), userDto.getEmail())
+        .ifPresent(user -> {
+            throw new ApiException("이미 등록된 아이디나 이메일입니다.", HttpStatus.BAD_REQUEST);
+        });
+
+    		
+    		 User newUser = new User();
+    	        Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
+    	        Set<Authority> authorities = new HashSet<>();
+    	        String encryptedPassword = passwordEncoder.encode(userDto.getPassword());
+    	        newUser.setLogin(userDto.getLogin());
+    	        newUser.setPassword(encryptedPassword);
+    	        newUser.setName(userDto.getName());
+    	        newUser.setEmail(userDto.getEmail().toLowerCase());
+    	        newUser.setActivated(false);
+    	        authorities.add(authority);
+    	        newUser.setAuthorities(authorities);
+    	        
+    	        log.debug("Created Information for User: {}", newUser);
+    	        
+    	        
+		return new AsyncResult<User>(newUser);
     }
     
     public User registerAccount(UserDto.Create userDto) {
