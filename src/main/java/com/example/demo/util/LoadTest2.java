@@ -18,7 +18,7 @@ public class LoadTest2 {
 	static AtomicInteger counter = new AtomicInteger(0);
 	static String postUserRegUrl = "http://52.193.154.247:28080/sbexample/api/registerAsync";
 	static String postloginUrl = "http://52.193.154.247:28080/sbexample/api/authenticateAsync";
-	static int loadCnt = 200;
+	static int loadCnt = 500;
 	static RestTemplate restTemplate = new RestTemplate();
 
 	
@@ -26,7 +26,7 @@ public class LoadTest2 {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-	ExecutorService es = Executors.newFixedThreadPool(100);
+	ExecutorService es = Executors.newFixedThreadPool(loadCnt);
 
 
 
