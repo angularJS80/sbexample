@@ -80,7 +80,7 @@ public class AuthController {
 		                 return ResponseEntity.ok(new JwtAuthResponse(jwtToken));
 		        }
 		        
-		        Thread.sleep(5);
+		        //Thread.sleep(5);
 	    		}
            
         } catch (Exception ae) {

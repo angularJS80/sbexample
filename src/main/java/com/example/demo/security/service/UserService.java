@@ -67,7 +67,7 @@ public class UserService {
         return newUser;
     }
 
-    @Async
+    @Async("threadPoolTaskExecutor")
    	public Future<User> registerAccountAsync(UserDto.Create userDto) {
     		User user = registerAccount(userDto);
 		return new AsyncResult<User>(user);

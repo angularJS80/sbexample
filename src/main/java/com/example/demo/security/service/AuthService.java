@@ -53,7 +53,7 @@ public class AuthService {
     @Autowired
     private JwtUtil jwtUtil;
     
-    @Async
+    @Async("threadPoolTaskExecutor")
 	public Future<String> authenticate(String username, String password,boolean rememberMe) {
 		UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(username, password);
