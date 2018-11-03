@@ -71,11 +71,7 @@ public class UserController {
     public ResponseEntity registerAccountAsync(@Valid @RequestBody UserDto.Create userDto) {
         HttpHeaders textPlainHeaders = new HttpHeaders();
         textPlainHeaders.setContentType(MediaType.TEXT_PLAIN);
-        if (!!StringUtils.isEmpty(userDto.getPassword()) &&
-                userDto.getPassword().length() >= 4 && userDto.getPassword().length() <= 100) {
-            return new ResponseEntity<>(CHECK_ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
-        }
-      
+       
     		Future<User> futureUserReg =  userService.registerAccountAsync(userDto);
     		
     	    try {
