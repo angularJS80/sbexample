@@ -27,10 +27,8 @@ public class CommonService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CommonService.class);
 	public static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.SSS").create();
-	public AsyncResult<String> requestRegUsers(LoadTestUser loadTestUser) {
-		LoadTestUtil.run(loadTestUser, "reg");
+	public AsyncResult<String> requestLoadTest(LoadTestUser loadTestUser) {
+		LoadTestUtil.run(loadTestUser);
          return new AsyncResult<String>("reuqested");
-	}
-	
-	
+	}	
 }

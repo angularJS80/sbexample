@@ -20,7 +20,7 @@ import com.example.demo.common.dto.LoadTestUser;
 
 public class LoadTestUtil {	
 
-	public static void run(LoadTestUser loadTestUser,String actionFlag) {
+	public static void run(LoadTestUser loadTestUser) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		
@@ -30,12 +30,12 @@ public class LoadTestUtil {
 		for (int i=startNum; i<loadCnt+startNum; i++){
 			String requestJson = "";
 					
-			if(actionFlag.equals("reg")) {
+			if(loadTestUser.getActionFlag().equals("reg")) {
 				loadTestUser.setPostUrl(LoadTestUser.postRegUrl);
 				requestJson = createRegUserJson(i,loadTestUser.getStartNum());		
 			}
 			
-			if(actionFlag.equals("auth")) {
+			if(loadTestUser.getActionFlag().equals("auth")) {
 				loadTestUser.setPostUrl(LoadTestUser.postRegUrl);
 				requestJson = createLoginUserJson(i,loadTestUser.getStartNum());	
 			}

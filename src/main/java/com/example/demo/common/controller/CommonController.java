@@ -44,7 +44,7 @@ public class CommonController {
         HttpHeaders textPlainHeaders = new HttpHeaders();
         textPlainHeaders.setContentType(MediaType.TEXT_PLAIN);
        
-    		Future<String> futureLoadTestUser=  commonService.requestRegUsers(loadTestUser);
+    		Future<String> futureLoadTestUser=  commonService.requestLoadTest(loadTestUser);
     		
     	    try {
 	    	    	while (true) {

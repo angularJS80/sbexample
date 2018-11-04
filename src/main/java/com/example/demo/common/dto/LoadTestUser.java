@@ -6,6 +6,14 @@ public class LoadTestUser {
 	
 	String postUrl = "";
 	int startNum = 0;
+	String actionFlag="reg";
+	
+	public String getActionFlag() {
+		return actionFlag;
+	}
+	public void setActionFlag(String actionFlag) {
+		this.actionFlag = actionFlag;
+	}
 	public String getPostUrl() {
 		return postUrl;
 	}
