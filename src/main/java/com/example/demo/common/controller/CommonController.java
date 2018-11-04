@@ -29,7 +29,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 @RestController
-@RequestMapping("/common")
+@RequestMapping("/api")
 public class CommonController {
 	private static final Logger logger = LoggerFactory.getLogger(CommonController.class);
     @Autowired 

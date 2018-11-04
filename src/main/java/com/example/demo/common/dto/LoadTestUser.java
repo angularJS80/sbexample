@@ -1,12 +1,19 @@
 package com.example.demo.common.dto;
 
 public class LoadTestUser {
-	public static final String postRegUrl = "http://52.193.154.247:28080/sbexample/api/registerAsync";
-	public static final String postloginUrl = "http://localhost:38080/sbexample2/api/authenticateAsync";
+	public String rootUrl = "http://localhost:38080/sbexample2";
+	public String postUrl = "";
+	public int startNum = 0;
+	public int loadCnt = 100;
+	public String actionFlag="reg";
 	
-	String postUrl = "";
-	int startNum = 0;
-	String actionFlag="reg";
+	
+	public String getRootUrl() {
+		return rootUrl;
+	}
+	public void setRootUrl(String rootUrl) {
+		this.rootUrl = rootUrl;
+	}
 	
 	public String getActionFlag() {
 		return actionFlag;
@@ -20,7 +27,7 @@ public class LoadTestUser {
 	public void setPostUrl(String postUrl) {
 		this.postUrl = postUrl;
 	}
-	int loadCnt = 100;
+
 	
 	public int getStartNum() {
 		return startNum;

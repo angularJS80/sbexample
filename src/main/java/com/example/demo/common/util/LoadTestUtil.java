@@ -27,16 +27,16 @@ public class LoadTestUtil {
 		List<HttpEntity<String>> entitys = new ArrayList<>();
 		int startNum = loadTestUser.getStartNum();
 		int loadCnt = loadTestUser.getLoadCnt();
-		for (int i=startNum; i<loadCnt+startNum; i++){
+		for (int i=startNum-1; i<=loadCnt+startNum; i++){
 			String requestJson = "";
 					
 			if(loadTestUser.getActionFlag().equals("reg")) {
-				loadTestUser.setPostUrl(LoadTestUser.postRegUrl);
+				loadTestUser.setPostUrl(loadTestUser.getRootUrl()+LoadTestConst.postRegUrl);
 				requestJson = createRegUserJson(i,loadTestUser.getStartNum());		
 			}
 			
 			if(loadTestUser.getActionFlag().equals("auth")) {
-				loadTestUser.setPostUrl(LoadTestUser.postRegUrl);
+				loadTestUser.setPostUrl(loadTestUser.getRootUrl()+LoadTestConst.postloginUrl);
 				requestJson = createLoginUserJson(i,loadTestUser.getStartNum());	
 			}
 			
@@ -47,10 +47,11 @@ public class LoadTestUtil {
 	}
 
 	public static void restRequest(LoadTestUser loadTestUser,List<HttpEntity<String>> entitys){
-		AtomicInteger counter = new AtomicInteger(0);
+		
 		RestTemplate restTemplate = new RestTemplate();
 		String postUrl = loadTestUser.getPostUrl();
 		int startNum = loadTestUser.getStartNum();
+		AtomicInteger counter = new AtomicInteger(startNum-1);
 		int loadCnt = loadTestUser.getLoadCnt();
 		
 		
@@ -59,7 +60,7 @@ public class LoadTestUtil {
 		StopWatch main = new StopWatch();
 		main.start();
 	
-		for (int i=startNum; i<loadCnt+startNum; i++){
+		for (int i=startNum-1; i<=loadCnt+startNum; i++){
 			es.submit(()->{
 				int idx = counter.addAndGet(1);
 				barrier.await();			
@@ -85,7 +86,7 @@ public class LoadTestUtil {
 
 	}
 	private static String createRegUserJson(int i,int startNum) {
-		int userIndex = startNum+i;
+		int userIndex = startNum+i-1;
 		String regUserJson = "{\n" + 
 				"  \"activated\": true,\n" + 
 				"  \"authorities\": [\n" + 
@@ -94,11 +95,11 @@ public class LoadTestUtil {
 				"    }\n" + 
 				"  ],\n" + 
 				"  \"createdBy\": \"testuser"+userIndex+"\",\n" +
-				"  \"createdDate\": \"2018-11-03T03:33:12.998Z\",\n" + 
-				"  \"email\": \"testuser"+startNum+i+"@test.com\",\n" + 
+				
+				"  \"email\": \"testuser"+userIndex+"@test.com\",\n" + 
 				"  \"id\": 0,\n" + 
 				"  \"lastModifiedBy\": \"testuser\",\n" + 
-				"  \"lastModifiedDate\": \"2018-11-03T03:33:12.998Z\",\n" + 
+				
 				"  \"login\": \"testuser"+userIndex+"\",\n" + 
 				"  \"name\": \"testuser"+userIndex+"\",\n" + 
 				"  \"password\": \"testuser\"\n" + 
@@ -107,7 +108,7 @@ public class LoadTestUtil {
 	}
 	
 	private static String createLoginUserJson(int i,int startNum) {
-		int userIndex = startNum+i;
+		int userIndex = startNum+i-1;
 		String logingUserJson = "{\"username\":\"testuser"+userIndex+"\",\"password\":\"testuser\"}";
 		return logingUserJson;
 	}
