@@ -1,12 +1,22 @@
 package com.example.demo.common.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel (value = "LoadTestUser object ", description ="로드테스트 인자") 
 public class LoadTestUser {
-	public String rootUrl = "http://localhost:38080/sbexample2";
-	public String postUrl = "";
-	public int startNum = 0;
-	public int loadCnt = 100;
+	@ApiModelProperty(required=true,value="rootUrl",example="http://52.193.154.247:28080/sbexample")
+	public String rootUrl = "";	
+	@ApiModelProperty(required=true,value="actionFlag",example="reg")
 	public String actionFlag="reg";
 	
+	public String postUrl = "";
+	
+	@ApiModelProperty(required=true,value="startNum",example="1")
+	public int startNum = 1;
+	
+	@ApiModelProperty(required=true,value="loadCnt",example="100")
+	public int loadCnt = 100;
 	
 	public String getRootUrl() {
 		return rootUrl;
