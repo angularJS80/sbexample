@@ -25,10 +25,13 @@ public class DatabaseConfig {
         log.debug("Configuring Datasource");
 
         HikariConfig config = new HikariConfig();
+        /* jndi lookup mode
         DefaultDatabaseConfig databaseConfig = new DefaultDatabaseConfig();
         config.setDataSource(databaseConfig.dataSource());
-        /*config.setDataSourceClassName(dataSourceProperties.getDriverClassName());
-
+        */
+        
+        // jdbc mode -Dspring.datasource.username="mydbusername" -Dspring.datasource.password="mydbpassword"
+        config.setDataSourceClassName(dataSourceProperties.getDriverClassName());
         config.addDataSourceProperty("url", dataSourceProperties.getUrl());
         if (dataSourceProperties.getUsername() != null) {
             config.addDataSourceProperty("user", dataSourceProperties.getUsername());
@@ -39,7 +42,7 @@ public class DatabaseConfig {
             config.addDataSourceProperty("password", dataSourceProperties.getPassword());
         } else {
             config.addDataSourceProperty("password", ""); // HikariCP doesn't allow null password
-        }*/
+        }
         return new HikariDataSource(config);
     }
     
