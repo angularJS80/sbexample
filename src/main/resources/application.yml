@@ -10,11 +10,12 @@ spring:
             enabled: true
     datasource:
 #        jndi-name: java:comp/env/jdbc/mysql
-        type: com.mysql.jdbc.Driver
-        url: jdbc:mysql://52.193.154.247:23306/sbtry?useSSL=false
+#        type: com.zaxxer.hikari.HikariDataSource
+        url: jdbc:mysql://52.193.154.247:23306/sbtry
         username: ${spring.datasource.username}
         password: ${spring.datasource.password}
-#        driver-class-name: org.h2.jdbcx.JdbcDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+
         initialize: true
 
     jpa:
