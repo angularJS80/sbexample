@@ -41,59 +41,62 @@
 	mkdir docker;
 	cd docker;
 	vi docker-compose.yml
-	version: '2'
-	services:
-	  jenkins:
-	    image: 'jenkins/jenkins:lts'
-	    restart: always
-	    user: root
-	    hostname: 'localhost'
-	    container_name: jenkins
-	    ports:
-	    - '29080:8080'
-	    - '10150:50000'
-	    volumes:
-	    - ./jenkins_home:/var/jenkins_home
+    version: '2'
+    services:
+    jenkins:
+    image: 'jenkins/jenkins:lts'
+    restart: always
+    user: root
+    hostname: 'localhost'
+    container_name: jenkins
+    ports:
+    - '29080:8080'
+    - '10150:50000'
+    volumes:
+    - ./jenkins_home:/var/jenkins_home
 	    
 	2)톰켓 
-	 #도커 컨테이너 대 호스트 간  경로
-		cd ~
-		mkdir docker;
-		cd  docker;
-		mkdir conf;
-		cd conf;
-		vi  tomcat-users.xml;
-	
-		<?xml version="1.0" encoding="UTF-8"?>
-		<tomcat-users xmlns="http://tomcat.apache.org/xml"
-		              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		              xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"
-		              version="1.0">
-		
-		<role rolename="manager-script"/>
-		<role rolename="manager-gui"/>
-		<user username="계정명" password="비번" roles="tomcat,manager-gui,manager-script"/>
-		</tomcat-users>
-	
-	
 	#톰켓 yml 작성
-		cd ~;
-		cd docker;
-		vi docker-compose.yml
-		version: '2'
-		services:
-		  tomcat:
-		    image: 'docker.io/tomcat:8.5'
-		    container_name: tomcat
-		    ports:
-		    - '48080:8080'
-		    volumes:
-		    - ./conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
-		    environment:
-		    - >
-		      CATALINA_OPTS=
-		        -Dspring.datasource.username="root"
-		        -Dspring.datasource.password="mysqldbuser"    
+        cd ~
+        mkdir docker;
+        cd  docker;
+        mkdir tomcat;
+        cd tomcat;
+        vi docker-compose.yml
+        version: '2'
+        services:
+        tomcat:
+        image: 'docker.io/tomcat:8.5'
+        container_name: tomcat
+        ports:
+        - '28080:8080'
+        volumes:
+        - ./conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+        - ./webapps/manager/META-INF/context.xml:/usr/local/tomcat/webapps/manager/META-INF/context.xml
+        environment:
+        - >
+        CATALINA_OPTS=
+        -Dspring.datasource.username="계정"
+        -Dspring.datasource.password="비번"
+        
+        #도커 컨테이너 대 호스트 간  경로
+        cd ~
+        cd  docker;
+        mkdir conf;
+        cd conf;
+        vi  tomcat-users.xml;
+        
+        <?xml version="1.0" encoding="UTF-8"?>
+        <tomcat-users xmlns="http://tomcat.apache.org/xml"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"
+        version="1.0">
+        
+        <role rolename="manager-script"/>
+        <role rolename="manager-gui"/>
+        <user username="계정명" password="비번" roles="tomcat,manager-gui,manager-script"/>
+        </tomcat-users>
+        
 
 	3) 실행
 	cd ~/docker
