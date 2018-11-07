@@ -1,32 +1,102 @@
- - SiliconVally Study 를 위한Api 설정을 위해 Try 해본 소스입니다. -
- 1. 구현환경 
-    1) OS Windows
-    1) IDE Eclipse Oxyzen + Sts Plugin
-    2) Tomcat8.0
-    3) PostGreSql Client (PGAdmin4.0)
+ Back-End 
+ 0.로컬 구동 환경 설정 	
+   tomcat argument 추가
+   -Dspring.datasource.username="root" -Dspring.datasource.password="mysqldbuser"
+ 
+ 1. 개발환경  
+    1) IDE : Eclipse Oxyzen + Sts Plugin
+    2) was : Tomcat8.5
+    3) database : Oracle 11
+    4) framework : spring boot 1.5.7
     
  2. 배포환경
-    1) Ncloud micro Server 
-    2) http Apache2
-    3) iptables
-    4) postgresql    
-   
- 3. 추가적으로 수정해야 되는 사항입니다. 
-    1) DB컨넥션에 필요한 Server 설정 파일중 context.xml <Context>와 </Context> 사이에 추가합니다. 
+    1) Aws Linux2 Docker - Jenkins
+    2) Aws Linux2 Docker - Tomcat
+    
+    
+    
+    
+ 4.Docker yml
+ ------------------------------------------------------------------------------------ 
+    tomcat 인스턴스 작업내역 
+	#docker 설치 
+	sudo su -;
+	sudo yum update -y;
+	sudo yum install -y docker;
+	sudo service docker start;
+	exit;
+	exit;
+	다시접속
+	sudo usermod -a -G docker $USER;
+	sudo service docker restart;
+	
+	#docker compose 설치
+	sudo su -;
+	curl -L https://github.com/docker/compose/releases/download/1.14.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose;
+	chmod +x /usr/local/bin/docker-compose ;
+	exit;
+	
+	1). 젠킨스 yml 작성
+	cd ~;
+	mkdir docker;
+	cd docker;
+	vi docker-compose.yml
+	version: '2'
+	services:
+	  jenkins:
+	    image: 'jenkins/jenkins:lts'
+	    restart: always
+	    user: root
+	    hostname: 'localhost'
+	    container_name: jenkins
+	    ports:
+	    - '29080:8080'
+	    - '10150:50000'
+	    volumes:
+	    - ./jenkins_home:/var/jenkins_home
+	    
+	2)톰켓 
+	 #도커 컨테이너 대 호스트 간  경로
+		cd ~
+		mkdir docker;
+		cd  docker;
+		mkdir conf;
+		cd conf;
+		vi  tomcat-users.xml;
+	
+		<?xml version="1.0" encoding="UTF-8"?>
+		<tomcat-users xmlns="http://tomcat.apache.org/xml"
+		              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		              xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"
+		              version="1.0">
+		
+		<role rolename="manager-script"/>
+		<role rolename="manager-gui"/>
+		<user username="계정명" password="비번" roles="tomcat,manager-gui,manager-script"/>
+		</tomcat-users>
+	
+	
+	#톰켓 yml 작성
+		cd ~;
+		cd docker;
+		vi docker-compose.yml
+		version: '2'
+		services:
+		  tomcat:
+		    image: 'docker.io/tomcat:8.5'
+		    container_name: tomcat
+		    ports:
+		    - '48080:8080'
+		    volumes:
+		    - ./conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+		    environment:
+		    - >
+		      CATALINA_OPTS=
+		        -Dspring.datasource.username="root"
+		        -Dspring.datasource.password="mysqldbuser"    
 
- <Resource name="jdbc/postgres" auth="Container"
-          type="javax.sql.DataSource" driverClassName="net.sf.log4jdbc.DriverSpy"
-          url="jdbc:log4jdbc:postgresql://아이피:5432/디비명"
-          username="접속아이디" password="페스워드" maxActive="20" maxIdle="10"
- maxWait="-1"/>
-
- WAS 에서 디비로 컨넥션하기위한 리눅스의 방화벽등을 설정합니다. 
- 방화벽은 centos 기본설치 방화벽 부분 참고
- 
- 
- 4. 남은 설정 사항
-  1) 인증 비인증 사용자의 컨트롤러 허용 적용 (InterCepter)
-  2) 컨트롤러 단위 Tranjection 관리
-  3) 로그인 세션 / 토큰 / 인증 처리 
-  4) 배치 기능 고민
-  5) 그외 프론트쪽은 별도의 프로젝트 생성하여 프론트쪽만 별도 관리  
+	3) 실행
+	cd ~/docker
+	docker-compose up -d;
+		
+------------------------------------------------------------------------------------	

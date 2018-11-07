@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel (value = "LoadTestUser object ", description ="로드테스트 인자") 
 public class LoadTestUser {
-	@ApiModelProperty(required=true,value="rootUrl",example="http://localhost:28080/sbexample")
+	@ApiModelProperty(required=true,value="rootUrl",example="http://localhost:8080/sbexample")
 	public String rootUrl = "";	
 
 	@ApiModelProperty(required=true,value="actionFlag",example="reg")
@@ -16,8 +16,8 @@ public class LoadTestUser {
 	@ApiModelProperty(required=true,value="startNum",example="1")
 	public int startNum = 1;
 	
-	@ApiModelProperty(required=true,value="loadCnt",example="100")
-	public int loadCnt = 100;
+	@ApiModelProperty(required=true,value="loadCnt",example="1")
+	public int loadCnt = 1;
 	
 	public String getRootUrl() {
 		return rootUrl;

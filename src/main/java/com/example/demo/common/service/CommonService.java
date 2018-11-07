@@ -7,6 +7,7 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,8 +28,10 @@ public class CommonService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CommonService.class);
 	public static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.SSS").create();
-	public AsyncResult<String> requestLoadTest(LoadTestUser loadTestUser) {
-		LoadTestUtil.run(loadTestUser);
-         return new AsyncResult<String>("reuqested");
-	}	
+	
+	public List<ResponseEntity> requestLoadTest(LoadTestUser loadTestUser) {
+		List<ResponseEntity> rtnList= LoadTestUtil.run(loadTestUser);
+        return rtnList;
+	}
+	
 }

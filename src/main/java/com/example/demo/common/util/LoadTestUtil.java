@@ -2,15 +2,16 @@ package com.example.demo.common.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StopWatch;
@@ -20,7 +21,7 @@ import com.example.demo.common.dto.LoadTestUser;
 
 public class LoadTestUtil {	
 
-	public static void run(LoadTestUser loadTestUser) {
+	public static List<ResponseEntity> run(LoadTestUser loadTestUser) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		
@@ -43,17 +44,17 @@ public class LoadTestUtil {
 			HttpEntity<String> regEntity = new HttpEntity<String>(requestJson,headers);
 			entitys.add(regEntity);
 		}
-		restRequest(loadTestUser ,entitys);
+		return restRequest(loadTestUser ,entitys);
 	}
 
-	public static void restRequest(LoadTestUser loadTestUser,List<HttpEntity<String>> entitys){
+	public static List<ResponseEntity> restRequest(LoadTestUser loadTestUser,List<HttpEntity<String>> entitys){
 		
 		RestTemplate restTemplate = new RestTemplate();
 		String postUrl = loadTestUser.getPostUrl();
 		int startNum = loadTestUser.getStartNum();
 		AtomicInteger counter = new AtomicInteger(startNum-1);
 		int loadCnt = loadTestUser.getLoadCnt();
-		
+		List<ResponseEntity> rtnList = new ArrayList();
 		
 		ExecutorService es = Executors.newFixedThreadPool(loadCnt);
 		CyclicBarrier barrier = new CyclicBarrier(loadCnt+1);	
@@ -61,20 +62,17 @@ public class LoadTestUtil {
 		main.start();
 	
 		for (int i=startNum-1; i<=loadCnt+startNum; i++){
-			es.submit(()->{
+			Future<ResponseEntity> asyncResponse = es.submit(()->{
 				int idx = counter.addAndGet(1);
-				barrier.await();			
-				StopWatch sw = new StopWatch();
-				sw.start();
-				
+				barrier.await();							
 				ResponseEntity<String> reganswer = restTemplate.postForEntity(postUrl, entitys.get(idx), String.class);
-				System.out.println("reganswer: "+reganswer);				
-				sw.stop();
-				return null;
+				System.out.println("reganswer" + reganswer);
+				rtnList.add(reganswer);
+				return reganswer;
 			});
 		}
+		
 		try {
-
 			barrier.await();
 			es.shutdown();
 			es.awaitTermination(loadCnt, TimeUnit.SECONDS);
@@ -82,7 +80,7 @@ public class LoadTestUtil {
 			e.printStackTrace();
 		}
 		main.stop();
-	
+		return rtnList;
 
 	}
 	private static String createRegUserJson(int i,int startNum) {

@@ -74,12 +74,12 @@ public class UserController {
     		Future<User> futureUserReg =  userService.registerAccountAsync(userDto);
     		
     	    try {
-	    	    	while (true) {
-		        if (futureUserReg.isDone()) {
-		        		 userRepository.save(futureUserReg.get());
-		        	     return new ResponseEntity<>(HttpStatus.CREATED);
-		        }
-		        Thread.sleep(700); // 쓰레드를 슬립을 주어 와일문을 쉬게 한다. 
+	    	    while (true) {
+			        if (futureUserReg.isDone()) {
+			        		 userRepository.save(futureUserReg.get());
+			        	     return new ResponseEntity<>(HttpStatus.CREATED);
+			        }
+			        Thread.sleep(700); // 쓰레드를 슬립을 주어 와일문을 쉬게 한다. 
 	    		}
            
         } catch (Exception ae) {

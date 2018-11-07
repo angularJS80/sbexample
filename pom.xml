@@ -7,7 +7,6 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>sbexample</name>
     <description>project for Spring-angular</description>
 
     <parent>
@@ -303,4 +302,5 @@
 
 
     <artifactId>sbexample</artifactId>
+    <name>webprj</name>
 </project>

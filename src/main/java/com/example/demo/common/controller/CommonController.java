@@ -1,11 +1,16 @@
 
 package com.example.demo.common.controller;
+import static com.example.demo.security.jwt.JwtFilter.AUTHORIZATION_HEADER;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -15,15 +20,23 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.AsyncResult;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.api.test.service.HeroService;
 import com.example.demo.common.dto.LoadTestUser;
 import com.example.demo.common.service.CommonService;
+import com.example.demo.security.jwt.JwtAuthRequest;
+import com.example.demo.security.jwt.JwtAuthResponse;
 import com.example.demo.security.model.User;
 import com.example.demo.security.model.UserDto;
 import com.google.gson.Gson;
@@ -42,15 +55,22 @@ public class CommonController {
 	public static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.SSS").create(); 
 	
     /*서버 로드테스트*/
-	@PostMapping(path = "/loadTestingUserReg",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE})
-    
-    public ResponseEntity registerAccountAsync(@Valid @RequestBody LoadTestUser loadTestUser) {
-        HttpHeaders textPlainHeaders = new HttpHeaders();
-        textPlainHeaders.setContentType(MediaType.TEXT_PLAIN);
-        commonService.requestLoadTest(loadTestUser);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    		
-    }
-    
+
+    @RequestMapping(value = "/loadTesting", method = RequestMethod.POST)
+    public ResponseEntity<?>  registerAccountAsync(@Valid @RequestBody LoadTestUser loadTestUser) {
+        
+    	
+    	List<ResponseEntity> rtnList = commonService.requestLoadTest(loadTestUser);
+    	
+    	
+    	//ArrayList rtnList = new ArrayList();
+    	
+        try {
+            return ResponseEntity.ok(rtnList);
+        } catch (AuthenticationException ae) {
+            logger.debug("Authentication exception trace: {}", ae);
+            return new ResponseEntity<>(Collections.singletonMap("AuthenticationException",
+                    ae.getLocalizedMessage()), HttpStatus.UNAUTHORIZED);
+        }    		
+    }    
 }
