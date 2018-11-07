@@ -29,8 +29,8 @@ public class CommonService {
 	private static final Logger logger = LoggerFactory.getLogger(CommonService.class);
 	public static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.SSS").create();
 	
-	public List<ResponseEntity> requestLoadTest(LoadTestUser loadTestUser) {
-		List<ResponseEntity> rtnList= LoadTestUtil.run(loadTestUser);
+	public List<String> requestLoadTest(LoadTestUser loadTestUser) {
+		List<String> rtnList= LoadTestUtil.run(loadTestUser);
         return rtnList;
 	}
 	

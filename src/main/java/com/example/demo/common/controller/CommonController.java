@@ -60,7 +60,7 @@ public class CommonController {
     public ResponseEntity<?>  registerAccountAsync(@Valid @RequestBody LoadTestUser loadTestUser) {
         
     	
-    	List<ResponseEntity> rtnList = commonService.requestLoadTest(loadTestUser);
+    	List<String> rtnList = commonService.requestLoadTest(loadTestUser);
     	
     	
     	//ArrayList rtnList = new ArrayList();
