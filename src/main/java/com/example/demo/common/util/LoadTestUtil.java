@@ -66,7 +66,7 @@ public class LoadTestUtil {
 				int idx = counter.addAndGet(1);
 				barrier.await();							
 				ResponseEntity<String> reganswer = restTemplate.postForEntity(postUrl, entitys.get(idx), String.class);
-				System.out.println("reganswer" + reganswer);
+				System.out.println("reganswer" + reganswer.getBody());
 				rtnList.add(reganswer.toString());
 				return reganswer;
 			});
@@ -76,10 +76,11 @@ public class LoadTestUtil {
 			barrier.await();
 			es.shutdown();
 			es.awaitTermination(loadCnt, TimeUnit.SECONDS);
+			main.stop();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		main.stop();
+		
 		return rtnList;
 
 	}
