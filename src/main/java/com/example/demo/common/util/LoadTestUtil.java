@@ -21,7 +21,7 @@ import com.example.demo.common.dto.LoadTestUser;
 
 public class LoadTestUtil {	
 
-	public static List<String> run(LoadTestUser loadTestUser) {
+	public static List<ResponseEntity> run(LoadTestUser loadTestUser) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		
@@ -47,27 +47,28 @@ public class LoadTestUtil {
 		return restRequest(loadTestUser ,entitys);
 	}
 
-	public static List<String> restRequest(LoadTestUser loadTestUser,List<HttpEntity<String>> entitys){
+	public static List<ResponseEntity> restRequest(LoadTestUser loadTestUser,List<HttpEntity<String>> entitys){
 		
 		RestTemplate restTemplate = new RestTemplate();
 		String postUrl = loadTestUser.getPostUrl();
 		int startNum = loadTestUser.getStartNum();
 		AtomicInteger counter = new AtomicInteger(startNum-1);
 		int loadCnt = loadTestUser.getLoadCnt();
-		List<String> rtnList = new ArrayList();
+		List<ResponseEntity> rtnList = new ArrayList();
 		
 		ExecutorService es = Executors.newFixedThreadPool(loadCnt);
 		CyclicBarrier barrier = new CyclicBarrier(loadCnt+1);	
 		StopWatch main = new StopWatch();
 		main.start();
 	
-		for (int i=startNum-1; i<=loadCnt+startNum; i++){
+		for (int i=0; i<loadCnt; i++){
 			Future<ResponseEntity> asyncResponse = es.submit(()->{
 				int idx = counter.addAndGet(1);
+				System.out.println("idx : "+idx);
 				barrier.await();							
 				ResponseEntity<String> reganswer = restTemplate.postForEntity(postUrl, entitys.get(idx), String.class);
-				System.out.println("reganswer" + reganswer.getBody());
-				rtnList.add(reganswer.toString());
+				System.out.println("reganswer" + reganswer);
+				rtnList.add(reganswer);
 				return reganswer;
 			});
 		}
@@ -76,11 +77,10 @@ public class LoadTestUtil {
 			barrier.await();
 			es.shutdown();
 			es.awaitTermination(loadCnt, TimeUnit.SECONDS);
-			main.stop();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		main.stop();
 		return rtnList;
 
 	}
