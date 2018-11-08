@@ -72,7 +72,8 @@ public class LoadTestUtil {
 				barrier.await();							
 				ResponseEntity<String> reganswer = restTemplate.postForEntity(postUrl, entitys.get(idx), String.class);
 				System.out.println("reganswer" + reganswer);
-				rtnList.add(reganswer.getBody().toString());
+
+				rtnList.add(reganswer.getBody());
 				return reganswer;
 			});
 		}
@@ -80,8 +81,7 @@ public class LoadTestUtil {
 		try {
 			barrier.await();
 			runSchTask(es,loadCnt);
-			
-		} catch (Exception e) {
+			} catch (Exception e) {
 			e.printStackTrace();
 		}
 		main.stop();
