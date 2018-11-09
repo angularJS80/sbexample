@@ -32,7 +32,12 @@ public class LoadTestUtil {
 		List<HttpEntity<String>> entitys = new ArrayList<>();
 		int startNum = loadTestUser.getStartNum();
 		int loadCnt = loadTestUser.getLoadCnt();
-		for (int i=startNum-1; i<=loadCnt+startNum; i++){
+		int startindex = startNum;
+		int endindex = loadCnt+startNum-1;
+		
+		System.out.println("startindex : "+startindex);
+		System.out.println("endindex : "+endindex);
+		for (int i=startindex; i<=endindex; i++){
 			String requestJson = "";
 					
 			if(loadTestUser.getActionFlag().equals("reg")) {
@@ -48,6 +53,7 @@ public class LoadTestUtil {
 			HttpEntity<String> regEntity = new HttpEntity<String>(requestJson,headers);
 			entitys.add(regEntity);
 		}
+		
 		return restRequest(loadTestUser ,entitys);
 	}
 
@@ -56,7 +62,7 @@ public class LoadTestUtil {
 		RestTemplate restTemplate = new RestTemplate();
 		String postUrl = loadTestUser.getPostUrl();
 		int startNum = loadTestUser.getStartNum();
-		AtomicInteger counter = new AtomicInteger(startNum-1);
+		AtomicInteger counter = new AtomicInteger(0);
 		int loadCnt = loadTestUser.getLoadCnt();
 		List<String> rtnList = new ArrayList();
 		
@@ -70,7 +76,7 @@ public class LoadTestUtil {
 				int idx = counter.addAndGet(1);
 				System.out.println("idx : "+idx);
 				barrier.await();							
-				ResponseEntity<String> reganswer = restTemplate.postForEntity(postUrl, entitys.get(idx), String.class);
+				ResponseEntity<String> reganswer = restTemplate.postForEntity(postUrl, entitys.get(idx-1), String.class);
 				System.out.println("reganswer" + reganswer);
 
 				rtnList.add(reganswer.getBody());
@@ -80,7 +86,9 @@ public class LoadTestUtil {
 		
 		try {
 			barrier.await();
-			runSchTask(es,loadCnt);
+			es.shutdown();
+			es.awaitTermination(loadCnt, TimeUnit.SECONDS);
+			//runSchTask(es,loadCnt);
 			} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -105,11 +113,12 @@ public class LoadTestUtil {
 	    });
 				
 		ThreadPoolTaskScheduler asyncTaskScheduler = new ThreadPoolTaskScheduler();
+		asyncTaskScheduler.initialize();
 		asyncTaskScheduler.schedule(task, c.getTime());
 	}
 	
-	private static String createRegUserJson(int i,int startNum) {
-		int userIndex = startNum+i-1;
+	private static String createRegUserJson(int userIndex,int startNum) {
+		
 		String regUserJson = "{\n" + 
 				"  \"activated\": true,\n" + 
 				"  \"authorities\": [\n" + 
@@ -130,8 +139,8 @@ public class LoadTestUtil {
 		return regUserJson;
 	}
 	
-	private static String createLoginUserJson(int i,int startNum) {
-		int userIndex = startNum+i-1;
+	private static String createLoginUserJson(int userIndex,int startNum) {
+		
 		String logingUserJson = "{\"username\":\"testuser"+userIndex+"\",\"password\":\"testuser\"}";
 		return logingUserJson;
 	}
