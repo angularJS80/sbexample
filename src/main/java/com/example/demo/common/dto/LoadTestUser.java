@@ -11,8 +11,6 @@ public class LoadTestUser {
 	@ApiModelProperty(required=true,value="actionFlag",example="reg")
 	public String actionFlag="reg";
 	
-	public String postUrl = "";
-	
 	@ApiModelProperty(required=true,value="startNum",example="1")
 	public int startNum = 1;
 	
@@ -32,13 +30,7 @@ public class LoadTestUser {
 	public void setActionFlag(String actionFlag) {
 		this.actionFlag = actionFlag;
 	}
-	public String getPostUrl() {
-		return postUrl;
-	}
-	public void setPostUrl(String postUrl) {
-		this.postUrl = postUrl;
-	}
-
+	
 	
 	public int getStartNum() {
 		return startNum;

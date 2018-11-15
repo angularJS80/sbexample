@@ -23,13 +23,15 @@ import org.springframework.util.StopWatch;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.common.dto.LoadTestUser;
+import com.example.demo.security.jwt.JwtAuthRequest;
+import com.example.demo.security.model.UserDto;
+import com.google.gson.Gson;
 public class LoadTestUtil {	
-
-	public static List<String> run(LoadTestUser loadTestUser) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+	static Gson gson = new Gson();
+	public static List<HttpEntity<String>> createRequests(LoadTestUser loadTestUser) {
 		
-		List<HttpEntity<String>> entitys = new ArrayList<>();
+		
+		
 		int startNum = loadTestUser.getStartNum();
 		int loadCnt = loadTestUser.getLoadCnt();
 		int startindex = startNum;
@@ -37,30 +39,57 @@ public class LoadTestUtil {
 		
 		System.out.println("startindex : "+startindex);
 		System.out.println("endindex : "+endindex);
-		for (int i=startindex; i<=endindex; i++){
-			String requestJson = "";
-					
-			if(loadTestUser.getActionFlag().equals("reg")) {
-				loadTestUser.setPostUrl(loadTestUser.getRootUrl()+LoadTestConst.postRegUrl);
-				requestJson = createRegUserJson(i,loadTestUser.getStartNum());		
-			}
+		List<HttpEntity<String>> requestEntitys = null;
+		if(loadTestUser.getActionFlag().equals("reg")) {
+			requestEntitys = createRegUserEntitiys(loadTestUser,startindex,endindex);
 			
-			if(loadTestUser.getActionFlag().equals("auth")) {
-				loadTestUser.setPostUrl(loadTestUser.getRootUrl()+LoadTestConst.postloginUrl);
-				requestJson = createLoginUserJson(i,loadTestUser.getStartNum());	
-			}
-			
-			HttpEntity<String> regEntity = new HttpEntity<String>(requestJson,headers);
-			entitys.add(regEntity);
 		}
 		
-		return restRequest(loadTestUser ,entitys);
+		if(loadTestUser.getActionFlag().equals("auth")) {
+			requestEntitys = createLoginUserEntitiys(loadTestUser,startindex,endindex);
+			
+		}
+		
+		return requestEntitys;
 	}
 
-	public static List<String> restRequest(LoadTestUser loadTestUser,List<HttpEntity<String>> entitys){
+	private static List<HttpEntity<String>> createLoginUserEntitiys(LoadTestUser loadTestUser, int startindex,
+			int endindex) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		List<HttpEntity<String>> requestEntitys = new ArrayList<>();
+		for (int i=startindex; i<=endindex; i++){
+			String requestJson = "";
+			//loadTestUser.setPostUrl(loadTestUser.getRootUrl()+LoadTestConst.postloginUrl);
+			//requestJson = createLoginUserJson(i,loadTestUser.getStartNum());	
+			requestJson = createLoginUser(i,loadTestUser.getStartNum());	
+			HttpEntity<String> regEntity = new HttpEntity<String>(requestJson,headers);
+			requestEntitys.add(regEntity);
+		}
+		return requestEntitys;
+	}
+
+	private static List<HttpEntity<String>> createRegUserEntitiys(LoadTestUser loadTestUser,int startindex, int endindex) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		List<HttpEntity<String>> requestEntitys = new ArrayList<>();
+		for (int i=startindex; i<=endindex; i++){
+			String requestJson = "";
+			//loadTestUser.setPostUrl(loadTestUser.getRootUrl()+LoadTestConst.postRegUrl);
+			//requestJson = createRegUserJson(i,loadTestUser.getStartNum());		
+			requestJson = createRegUser(i,loadTestUser.getStartNum());		
+			HttpEntity<String> regEntity = new HttpEntity<String>(requestJson,headers);
+			requestEntitys.add(regEntity);
+		}
+		return requestEntitys;
+	}
+
+	public static List<String> restRequest(LoadTestUser loadTestUser,List<HttpEntity<String>> requestEntitys,String postUrl){
 		
 		RestTemplate restTemplate = new RestTemplate();
-		String postUrl = loadTestUser.getPostUrl();
+		
+		
+		
 		int startNum = loadTestUser.getStartNum();
 		AtomicInteger counter = new AtomicInteger(0);
 		int loadCnt = loadTestUser.getLoadCnt();
@@ -76,7 +105,7 @@ public class LoadTestUtil {
 				int idx = counter.addAndGet(1);
 				System.out.println("idx : "+idx);
 				barrier.await();							
-				ResponseEntity<String> reganswer = restTemplate.postForEntity(postUrl, entitys.get(idx-1), String.class);
+				ResponseEntity<String> reganswer = restTemplate.postForEntity(postUrl, requestEntitys.get(idx-1), String.class);
 				System.out.println("reganswer" + reganswer);
 
 				rtnList.add(reganswer.getBody());
@@ -117,8 +146,30 @@ public class LoadTestUtil {
 		asyncTaskScheduler.schedule(task, c.getTime());
 	}
 	
-	private static String createRegUserJson(int userIndex,int startNum) {
+
+
+	private static  String createRegUser(int userIndex,int startNum) {
 		
+		UserDto.Create userDtoCreate = new UserDto.Create();
+		userDtoCreate.setEmail("testuser"+userIndex+"@test.com");
+		userDtoCreate.setLogin("testuser"+userIndex);
+		userDtoCreate.setName("testuser"+userIndex);
+		userDtoCreate.setPassword("testuser"+userIndex);
+		return gson.toJson(userDtoCreate);
+	}
+
+	
+	
+	
+	private static String createLoginUser(int userIndex,int startNum) {
+		JwtAuthRequest jwtAuthRequest = new JwtAuthRequest();
+		jwtAuthRequest.setPassword("testuser"+userIndex);
+		jwtAuthRequest.setUsername("testuser"+userIndex);
+		return gson.toJson(jwtAuthRequest); 
+	}
+	
+	/* 제거 예
+	private static String createRegUserJson(int userIndex,int startNum) {
 		String regUserJson = "{\n" + 
 				"  \"activated\": true,\n" + 
 				"  \"authorities\": [\n" + 
@@ -138,11 +189,13 @@ public class LoadTestUtil {
 				"}";
 		return regUserJson;
 	}
-	
+
 	private static String createLoginUserJson(int userIndex,int startNum) {
 		
 		String logingUserJson = "{\"username\":\"testuser"+userIndex+"\",\"password\":\"testuser\"}";
 		return logingUserJson;
 	}
+	*/
+	
 
 }
