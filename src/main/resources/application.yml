@@ -11,12 +11,10 @@ spring:
     datasource:
 #        jndi-name: java:comp/env/jdbc/mysql
 #        type: com.zaxxer.hikari.HikariDataSource
-#        url: jdbc:mysql://52.193.154.247:23306/sbtry
-        jdbc-url: jdbc:oracle:thin:@ksoracledev.ceihgewy0dmx.ap-northeast-2.rds.amazonaws.com:1521:ORCL
-        username: ${spring.datasource.username}
-        password: ${spring.datasource.password}
-#       driver-class-name: com.mysql.jdbc.Driver
-        driver-class-name: oracle.jdbc.OracleDriver
+        url: jdbc:mysql://52.193.154.247:23306/sbtry
+        username: root
+        password: mysqldbuser
+        driver-class-name: com.mysql.jdbc.Driver
         initialize: true
         hikari: 
           pool-name: hikari-cp
