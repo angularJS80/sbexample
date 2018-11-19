@@ -14,30 +14,22 @@ spring:
         url: jdbc:mysql://52.193.154.247:23306/sbtry
         username: root
         password: mysqldbuser
-        driver-class-name: com.mysql.jdbc.Driver
+        driver-class-name: com.mysql.jdbc.Driver                    
         initialize: true
-        hikari: 
-          pool-name: hikari-cp
-          maximum-pool-size: 30
-          minimum-idle: 2
-          data-source-properties: 
-            cachePrepStmts: true
-            prepStmtCacheSize: 250
-            prepStmtCacheSqlLimit: 2048
-            useServerPrepStmts: true
-
-
+        max-active: 10
+        max-idle: 8
+        min-idle: 8
+        initial-size: 5
+        jdbc-url: jdbc:mysql://52.193.154.247:23306/sbtry         
     jpa:
-#       database-platform: org.hibernate.dialect.PostgreSQL94Dialect
-#        database-platform: = org.hibernate.dialect.MySQL5Dialect
-#        database: POSTGRESQL
+        database: MYSQL
         show-sql: true
         format_sql: true
-#        properties:
-#            hibernate.id.new_generator_mappings: true
-#            hibernate.cache.use_second_level_cache: true
-#            hibernate.cache.use_query_cache: false
-#            hibernate.generate_statistics: true
+        properties:
+            hibernate.id.new_generator_mappings: true
+            hibernate.cache.use_second_level_cache: true
+            hibernate.cache.use_query_cache: false
+            hibernate.generate_statistics: true
 #            hibernate.session.events.log: false
 #            hibernate.temp.use_jdbc_metadata_defaults: false            
         hibernate:
@@ -59,3 +51,6 @@ application:
             secret: 5867a8374e7c0f6284b177b48faf89e1c79d72d8
             token-validity-in-seconds: 86400 # 24 hour
             token-validity-in-seconds-for-remember-me: 2592000
+
+cors: 
+    originUrl: http://localhost:8081

@@ -25,6 +25,13 @@
         <npm.version>5.4.2</npm.version>
         <commons-lang.version>3.6</commons-lang.version>
         <jjwt.version>0.7.0</jjwt.version>
+        
+        <wildflyhost>52.193.154.247</wildflyhost>
+		<wildflyport>29990</wildflyport>
+		<wildflyusername>wasadmin</wildflyusername>
+		<wildflypassword>was.admin</wildflypassword>
+		<warfilename>sbexample-0.0.1-SNAPSHOT.war</warfilename>
+		
     </properties>
 
     <dependencies>
@@ -111,6 +118,7 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
+            <version>2.7.4</version>
         </dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -235,6 +243,28 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+			  <groupId>org.wildfly.plugins</groupId>
+			  <artifactId>wildfly-maven-plugin</artifactId>
+			  <version>1.1.0.Alpha10</version>
+			  <executions>
+			    <execution>
+			      <phase>install</phase>
+			      <goals>
+			        <goal>redeploy</goal>
+			      </goals>
+			    </execution>
+			  </executions>
+			  <configuration>
+			    <force>true</force>
+			    <hostname>${wildflyhost}</hostname>
+			    
+			    <port>${wildflyport}</port>
+			    <username>${wildflyusername}</username>
+			    <password>${wildflypassword}</password>
+			    <filename>${warfilename}</filename>
+			  </configuration>
+			</plugin>
         </plugins>
     </build>
 
@@ -248,55 +278,6 @@
                 <logback.loglevel>DEBUG</logback.loglevel>
                 <spring.profiles.active>dev</spring.profiles.active>
             </properties>
-        </profile>
-        <profile>
-            <id>frontend</id>
-            <build>
-                <plugins>
-                    <!-- Frontend -->
-                    <plugin>
-                        <groupId>com.github.eirslett</groupId>
-                        <artifactId>frontend-maven-plugin</artifactId>
-                        <version>${frontend-plugin.version}</version>
-                        <configuration>
-                            <workingDirectory>src/main/frontend</workingDirectory>
-                            <nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
-                            <nodeVersion>${node.version}</nodeVersion>
-                            <npmVersion>${npm.version}</npmVersion>
-                            <installDirectory>target</installDirectory>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>install node and npm</id>
-                                <goals>
-                                    <goal>install-node-and-npm</goal>
-                                </goals>
-                                <phase>generate-resources</phase>
-                            </execution>
-                            <execution>
-                                <id>npm install</id>
-                                <goals>
-                                    <goal>npm</goal>
-                                </goals>
-                                <configuration>
-                                    <arguments>install</arguments>
-                                    <installDirectory>target</installDirectory>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>angular cli build</id>
-                                <goals>
-                                    <goal>npm</goal>
-                                </goals>
-                                <phase>generate-resources</phase>
-                                <configuration>
-                                    <arguments>run build</arguments>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
         </profile>
     </profiles>
 
